@@ -1,23 +1,22 @@
 {
   "files": {
-    "main.css": "/rchat/static/css/main.5f361e03.chunk.css",
-    "main.js": "/rchat/static/js/main.43a9ef85.chunk.js",
-    "main.js.map": "/rchat/static/js/main.43a9ef85.chunk.js.map",
+    "main.css": "/rchat/static/css/main.5ecd60fb.chunk.css",
+    "main.js": "/rchat/static/js/main.77db41b4.chunk.js",
+    "main.js.map": "/rchat/static/js/main.77db41b4.chunk.js.map",
     "runtime-main.js": "/rchat/static/js/runtime-main.866f3656.js",
     "runtime-main.js.map": "/rchat/static/js/runtime-main.866f3656.js.map",
-    "static/js/2.805b91f2.chunk.js": "/rchat/static/js/2.805b91f2.chunk.js",
-    "static/js/2.805b91f2.chunk.js.map": "/rchat/static/js/2.805b91f2.chunk.js.map",
+    "static/js/2.2128a0f5.chunk.js": "/rchat/static/js/2.2128a0f5.chunk.js",
+    "static/js/2.2128a0f5.chunk.js.map": "/rchat/static/js/2.2128a0f5.chunk.js.map",
     "index.html": "/rchat/index.html",
-    "precache-manifest.ca79b48957c96cc5b9278cda425011d4.js": "/rchat/precache-manifest.ca79b48957c96cc5b9278cda425011d4.js",
+    "precache-manifest.e3a02dbd0a2aea94e94f31008dce9cdb.js": "/rchat/precache-manifest.e3a02dbd0a2aea94e94f31008dce9cdb.js",
     "service-worker.js": "/rchat/service-worker.js",
-    "static/css/main.5f361e03.chunk.css.map": "/rchat/static/css/main.5f361e03.chunk.css.map",
-    "static/js/2.805b91f2.chunk.js.LICENSE.txt": "/rchat/static/js/2.805b91f2.chunk.js.LICENSE.txt",
-    "static/media/logo.svg": "/rchat/static/media/logo.5d5d9eef.svg"
+    "static/css/main.5ecd60fb.chunk.css.map": "/rchat/static/css/main.5ecd60fb.chunk.css.map",
+    "static/js/2.2128a0f5.chunk.js.LICENSE.txt": "/rchat/static/js/2.2128a0f5.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.866f3656.js",
-    "static/js/2.805b91f2.chunk.js",
-    "static/css/main.5f361e03.chunk.css",
-    "static/js/main.43a9ef85.chunk.js"
+    "static/js/2.2128a0f5.chunk.js",
+    "static/css/main.5ecd60fb.chunk.css",
+    "static/js/main.77db41b4.chunk.js"
   ]
 }
