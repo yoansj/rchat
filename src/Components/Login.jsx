@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -30,41 +30,62 @@ const styles = {
     }
 }
 
-function Login() {
-    const [name, setName] = useState("");
-    const [err, setErr] = useState(null);
-    const [redirect, setRedirect] = useState(false);
+class Login extends React.Component {
+    constructor() {
+        super();
+        this.defaultName = names[getRndInteger(0, names.length - 1)];
+        this.state = {
+            description: description[getRndInteger(0, description.length - 1)],
+            defaultName: this.defaultName,
+            identify: login[getRndInteger(0, login.length - 1)],
+            joinButton: enterButton[getRndInteger(0, enterButton.length - 1)],
+            name: this.defaultName,
+            redirect: false,
+        }
+    }
 
-    function checkValidity() {
-        if (name !== "" && name !== null) {
-            setRedirect(true);
+    setRedirect(bool) {
+        this.setState({redirect: bool});
+    }
+
+    setName(name) {
+        this.setState({name: name});
+    }
+
+    checkValidity() {
+        if (this.state.name !== "" && this.state.name !== null) {
+            this.setRedirect(true);
+            window.localStorage.setItem("username", this.state.name);
         } else {
             alert("Invalid name :(");
         }
     }
 
-    return (
-        <div style={styles.mainDiv}>
+    render() {
+        return (
+            <div style={styles.mainDiv}>
             <h1 style={styles.title}>
                 Rchat
             </h1>
-            <h1 style={styles.funnySentance}>
-                {description[getRndInteger(0, description.length - 1)]}
-            </h1>
+            <h3 style={styles.funnySentance}>
+                {this.state.description}
+            </h3>
             <TextField
                 id="test"
                 variant="outlined"
-                defaultValue={names[getRndInteger(0, names.length)]}
-                label={login[getRndInteger(0, login.length - 1)]}
+                defaultValue={this.state.defaultName}
+                label={this.state.identify}
                 required
-                onChange={(event) => setName(event.target.value)} 
+                onChange={(event) => this.setName(event.target.value)} 
             />
-            <Button style={{paddingTop: 20}} color="primary" onClick={() => checkValidity()}>
-                {enterButton[getRndInteger(0, enterButton.length - 1)]}
+            <div style={{paddingTop: 20}}/>
+            <Button color="primary" onClick={() => this.checkValidity()}>
+                {this.state.joinButton}
             </Button>
-            {redirect && <Redirect push to="/choose" />}
+            {this.state.redirect && <Redirect push to="/choose" />}
         </div>
-    );
+        );
+    }
 }
 
 export default Login;

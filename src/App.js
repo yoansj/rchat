@@ -7,14 +7,14 @@ import {
     Link
 } from "react-router-dom";
 
-import Login from './Components/Login'
+import Login from './Components/Login.jsx'
 
 function App() {
     return (
     <div>
         <Router>
             <Switch>
-                <Route exact path="/">
+                <Route exact path="/rchat">
                     <Login />
                 </Route>
                 <Route path="/choose">
