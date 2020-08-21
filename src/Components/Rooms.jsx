@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import database from '../firebase';
+import Header from './Header'
 
 import { Redirect } from 'react-router';
 
@@ -95,22 +96,24 @@ function Rooms() {
     }, [])
 
     return (
-    <div style={styles.mainDiv}>
-        <h1 style={styles.title}>Rchat</h1>
-        <List
-        style={styles.roomList}
-        component="nav"
-        aria-label="rooms"
-        className={classes.root}
-        subheader={
-            <ListSubheader component="div" id="rooms-subheader">
-                Rooms
-            </ListSubheader>
-        }
-        >
-            {RenderRooms(rooms, setRedirect)}
-        </List>
-        {redirect != "" && <Redirect push to={"/" + redirect}  />}
+    <div>
+        <Header/>
+        <div style={styles.mainDiv}>
+            <List
+            style={styles.roomList}
+            component="nav"
+            aria-label="rooms"
+            className={classes.root}
+            subheader={
+                <ListSubheader component="div" id="rooms-subheader">
+                    Rooms
+                </ListSubheader>
+            }
+            >
+                {RenderRooms(rooms, setRedirect)}
+            </List>
+            {redirect != "" && <Redirect push to={"/" + redirect}  />}
+        </div>
     </div>
     );
 }
