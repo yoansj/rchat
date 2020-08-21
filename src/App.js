@@ -4,10 +4,11 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    useParams
 } from "react-router-dom";
 
 import Login from './Components/Login.jsx'
+import Rooms from './Components/Rooms.jsx'
 
 function App() {
     return (
@@ -18,12 +19,24 @@ function App() {
                     <Login />
                 </Route>
                 <Route path="/choose">
-                    <h6>Hello there</h6>
+                    <Rooms />
+                </Route>
+                <Route path="/:room" children={<Room />}>
                 </Route>
             </Switch>
         </Router>
     </div>
     );
+}
+
+function Room() {
+    let { room } = useParams();
+
+    return (
+        <div>
+            <h3>Room ID {room} </h3>
+        </div>
+    )
 }
 
 export default App;

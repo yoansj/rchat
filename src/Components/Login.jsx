@@ -1,11 +1,13 @@
-import React, { useState, useEffect} from 'react';
+import React from 'react';
+
+import { v4 as uuidv4 } from 'uuid';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import { Redirect } from 'react-router';
 
-import { description, enterButton, login, names } from './Login';
+import { description, enterButton, login, names } from './login';
 import { getRndInteger } from './utils';
 
 const styles = {
@@ -56,6 +58,7 @@ class Login extends React.Component {
         if (this.state.name !== "" && this.state.name !== null) {
             this.setRedirect(true);
             window.localStorage.setItem("username", this.state.name);
+            window.localStorage.setItem("uuid", uuidv4());
         } else {
             alert("Invalid name :(");
         }
