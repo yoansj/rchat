@@ -43,10 +43,6 @@ const styles = {
     }
 }
 
-function GetRooms() {
-
-}
-
 function JoinRoom(event, room, setRedirect) {
     alert(room[0] + " " + room[1].name);
     setRedirect(room[0]);
@@ -97,7 +93,7 @@ function Rooms() {
 
     return (
     <div>
-        <Header/>
+        <Header left='help' right='profile'/>
         <div style={styles.mainDiv}>
             <List
             style={styles.roomList}
@@ -112,7 +108,7 @@ function Rooms() {
             >
                 {RenderRooms(rooms, setRedirect)}
             </List>
-            {redirect != "" && <Redirect push to={"/" + redirect}  />}
+            {redirect !== "" && <Redirect push to={"/" + redirect}  />}
         </div>
     </div>
     );

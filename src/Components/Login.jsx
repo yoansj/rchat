@@ -66,10 +66,8 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div style={styles.mainDiv}>
-            <h1 style={styles.title}>
-                Rchat
-            </h1>
+        <div style={styles.mainDiv}>
+            <h1 style={styles.title}>Rchat</h1>
             <h3 style={styles.funnySentance}>
                 {this.state.description}
             </h3>
@@ -82,7 +80,7 @@ class Login extends React.Component {
                 onChange={(event) => this.setName(event.target.value)} 
             />
             <div style={{paddingTop: 20}}/>
-            <Button color="primary" onClick={() => this.checkValidity()}>
+            <Button color="primary" variant="contained" onClick={() => this.checkValidity()}>
                 {this.state.joinButton}
             </Button>
             {this.state.redirect && <Redirect push to="/choose" />}

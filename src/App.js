@@ -9,6 +9,7 @@ import {
 
 import Login from './Components/Login.jsx'
 import Rooms from './Components/Rooms.jsx'
+import Profile from './Components/Profile.jsx'
 
 function App() {
     return (
@@ -21,8 +22,10 @@ function App() {
                 <Route path="/choose">
                     <Rooms />
                 </Route>
-                <Route path="/:room" children={<Room />}>
+                <Route path="/me">
+                    <Profile />
                 </Route>
+                <Route path="/:room" children={<Room />} />
             </Switch>
         </Router>
     </div>
