@@ -12,6 +12,20 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import LockIcon from '@material-ui/icons/Lock';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { func } from 'prop-types';
+
+
 const useStyles = makeStyles((theme) => ({
     root: {
       width: '100%',
@@ -43,18 +57,22 @@ const styles = {
     }
 }
 
-function JoinRoom(event, room, setRedirect) {
-    alert(room[0] + " " + room[1].name);
-    setRedirect(room[0]);
+function JoinRoom(room, setRedirect, setDialog, setCurrentRoom) {
+    if (room[1].locked) {
+        setCurrentRoom(room);
+        setDialog(true);
+    }
+    else
+        setRedirect(room[0]);
 }
 
-function RenderRooms(roomsArray, setRedirect) {
+function RenderRooms(roomsArray, setRedirect, setDialog, setCurrentRoom) {
 
     return (
         roomsArray.map((room) =>
             <ListItem 
                 button
-                onClick={(event) => JoinRoom(event, room, setRedirect)}
+                onClick={() => JoinRoom(room, setRedirect, setDialog, setCurrentRoom)}
             >
                 <ListItemText primary={room[1].name} />
                 <ListItemIcon>
@@ -65,11 +83,80 @@ function RenderRooms(roomsArray, setRedirect) {
     );
 }
 
+function AddRoom() {
+
+    const [show, setShow] = useState(false);
+    const [name, setName] = useState("");
+    const [hasPassword, setHasPassword] = useState(false);
+    const [password, setPassword] = useState("Change my opinion: Joseph Joestar is the best jojo");
+
+    function createRoom() {
+        database.collection("rooms").doc().set({
+            name: name,
+            locked: hasPassword,
+            password: password
+        })
+        .then(function() {
+            alert("let's gooo");
+        })
+        .catch(function(error) {
+            alert("error man");
+            console.error(error);
+        })
+    }
+
+    return (
+        <div>
+            <Dialog
+            open={show}
+            onClose={() => setShow(false)}
+            aria-labelledby="room-dialog"
+            aria-describedby="create-room"
+            >
+                <DialogTitle id='hmm-create-room'>Create a new room</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        id="room-name"
+                        variant="outlined"
+                        label={"Room name"}
+                        defaultValue={name}
+                        style={{width: 500}}
+                        onChange={(event) => setName(event.currentTarget.value)}
+                    />
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                        <Switch name="hasPassword" checked={hasPassword} onChange={() => setHasPassword(!hasPassword)} />
+                        <h3>Password</h3>
+                    </div>
+                    {hasPassword && 
+                        <TextField
+                            id="room-password"
+                            variant="outlined"
+                            label={"Password"}
+                            style={{width: 500}}
+                            onChange={(event) => setPassword(event.currentTarget.value)}
+                        />
+                    }
+                </DialogContent>
+                <DialogActions>
+                    <Button color="primary" onClick={() => createRoom()}>Create</Button>
+                </DialogActions>
+            </Dialog>
+            <Button color="primary" variant="contained" onClick={() => setShow(true)}>
+                Create new room
+            </Button>
+        </div>
+    );
+}
+
 function Rooms() {
     const classes = useStyles();
 
     const [rooms, setRooms] = useState([]);
     const [redirect, setRedirect] = useState("");
+    const [dialog, setDialog] = useState(false);
+    const [wrong, setWrong] = useState(false);
+    const [password, setPassword] = useState("");
+    const [currentRoom, setCurrentRoom] = useState();
 
     useEffect(() => {
         database.collection("rooms").onSnapshot(
@@ -91,10 +178,42 @@ function Rooms() {
         )
     }, [])
 
+    function checkPassword() {
+        if (password === currentRoom[1].password)
+            setRedirect(currentRoom[0]);
+        else
+            setWrong(true);
+    }
+
     return (
     <div>
         <Header left='help' right='profile'/>
+        <Snackbar open={wrong} onClose={() => setWrong(false)} autoHideDuration={3000}>
+            <MuiAlert onClose={() => setWrong(false)} severity="error">Bad password</MuiAlert>
+        </Snackbar>
+        <Dialog
+            open={dialog}
+            onClose={() => setDialog(false)}
+            aria-labelledby="password-dialog"
+            aria-describedby="enter-room-password"
+        >
+            <DialogTitle id='password-title'>This room is locked enter the password to continue</DialogTitle>
+            <DialogContent>
+                <TextField
+                    id="password"
+                    variant="outlined"
+                    label={"Password"}
+                    style={{width: 500}}
+                    type='password'
+                    onChange={(event) => setPassword(event.currentTarget.value)}
+                />
+            </DialogContent>
+            <DialogActions>
+                <Button color="primary" onClick={() => checkPassword()}>Enter</Button>
+            </DialogActions>
+        </Dialog>
         <div style={styles.mainDiv}>
+            <AddRoom />
             <List
             style={styles.roomList}
             component="nav"
@@ -106,9 +225,9 @@ function Rooms() {
                 </ListSubheader>
             }
             >
-                {RenderRooms(rooms, setRedirect)}
+                {RenderRooms(rooms, setRedirect, setDialog, setCurrentRoom)}
             </List>
-            {redirect !== "" && <Redirect push to={"/" + redirect}  />}
+            {redirect !== "" && <Redirect push to={"/" + redirect} />}
         </div>
     </div>
     );
