@@ -22,9 +22,8 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { func } from 'prop-types';
 
+import firebase from 'firebase';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -86,18 +85,37 @@ function RenderRooms(roomsArray, setRedirect, setDialog, setCurrentRoom) {
 function AddRoom() {
 
     const [show, setShow] = useState(false);
-    const [name, setName] = useState("");
+    const [name, setName] = useState("Change my opinion: Joseph Joestar is the best jojo");
     const [hasPassword, setHasPassword] = useState(false);
-    const [password, setPassword] = useState("Change my opinion: Joseph Joestar is the best jojo");
+    const [password, setPassword] = useState("");
 
     function createRoom() {
-        database.collection("rooms").doc().set({
+        var newRoom = database.collection("rooms").doc();
+
+        newRoom.set({
             name: name,
             locked: hasPassword,
-            password: password
+            password: password,
+            creator: [window.localStorage.getItem("uuid"), window.localStorage.getItem("username")]
         })
         .then(function() {
-            alert("let's gooo");
+            setShow(false);
+            // Afficher le message salle créée
+        })
+        .catch(function(error) {
+            alert("error man");
+            console.error(error);
+        })
+        newRoom.collection("messages").doc().set({
+            message: "Welcome to the room :)",
+            sender: "room",
+            date: firebase.firestore.Timestamp.fromDate(new Date())
+        })
+        newRoom.collection("members").doc(window.localStorage.getItem("uuid")).set({
+            member: [window.localStorage.getItem("uuid"), window.localStorage.getItem("username")]
+        })
+        .then(function() {
+            // On rejoint la salle ici
         })
         .catch(function(error) {
             alert("error man");
@@ -179,8 +197,12 @@ function Rooms() {
     }, [])
 
     function checkPassword() {
-        if (password === currentRoom[1].password)
+        if (password === currentRoom[1].password) {
+            database.collection("rooms").doc(currentRoom[1].id).collection("members").doc(window.localStorage.getItem("uuid")).set({
+                member: [window.localStorage.getItem("uuid"), window.localStorage.getItem("username")]
+            });
             setRedirect(currentRoom[0]);
+        }
         else
             setWrong(true);
     }

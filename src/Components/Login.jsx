@@ -10,6 +10,8 @@ import { Redirect } from 'react-router';
 import { description, enterButton, login, names } from './login';
 import { getRndInteger } from './utils';
 
+import database from '../firebase';
+
 const styles = {
     mainDiv: {
         display: 'flex',
@@ -43,6 +45,8 @@ class Login extends React.Component {
             joinButton: enterButton[getRndInteger(0, enterButton.length - 1)],
             name: this.defaultName,
             redirect: false,
+            tag: "random",
+            roomId: "",
         }
     }
 
@@ -56,9 +60,20 @@ class Login extends React.Component {
 
     checkValidity() {
         if (this.state.name !== "" && this.state.name !== null) {
-            this.setRedirect(true);
             window.localStorage.setItem("username", this.state.name);
             window.localStorage.setItem("uuid", uuidv4());
+            database.collection("rooms").get().then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    console.log(doc.id, " => ", doc.data());
+                    if (doc.data().tag === this.state.tag) {
+                        console.log("Room found: Going in");
+                        this.setState({roomId: doc.id});
+                        this.setRedirect(true);
+                    }
+                }.bind(this))
+                if (!this.state.redirect) {
+                }
+            }.bind(this))
         } else {
             alert("Invalid name :(");
         }
@@ -72,7 +87,7 @@ class Login extends React.Component {
                 {this.state.description}
             </h3>
             <TextField
-                id="test"
+                id="id"
                 variant="outlined"
                 defaultValue={this.state.defaultName}
                 label={this.state.identify}
@@ -80,10 +95,19 @@ class Login extends React.Component {
                 onChange={(event) => this.setName(event.target.value)} 
             />
             <div style={{paddingTop: 20}}/>
+            <TextField
+                id="tag"
+                variant="outlined"
+                defaultValue={this.state.tag}
+                label="Enter a tag"
+                required
+                onChange={(event) => this.setState({tag: event.target.value})} 
+            />
+            <div style={{paddingTop: 20}}/>
             <Button color="primary" variant="contained" onClick={() => this.checkValidity()}>
                 {this.state.joinButton}
             </Button>
-            {this.state.redirect && <Redirect push to="/choose" />}
+            {this.state.redirect && <Redirect push to={`/rooms/${this.state.roomId}`} />}
         </div>
         );
     }

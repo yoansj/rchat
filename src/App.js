@@ -4,12 +4,12 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    useParams
 } from "react-router-dom";
 
 import Login from './Components/Login.jsx'
 import Rooms from './Components/Rooms.jsx'
 import Profile from './Components/Profile.jsx'
+import Room from './Components/Room.jsx'
 
 function App() {
     return (
@@ -25,21 +25,14 @@ function App() {
                 <Route path="/me">
                     <Profile />
                 </Route>
-                <Route path="/:room" children={<Room />} />
+                <Route path="/404">
+                    <h6>This room does not exist yoo</h6>
+                </Route>
+                <Route path="/rooms/:room" children={<Room />} />
             </Switch>
         </Router>
     </div>
     );
-}
-
-function Room() {
-    let { room } = useParams();
-
-    return (
-        <div>
-            <h3>Room ID {room} </h3>
-        </div>
-    )
 }
 
 export default App;
