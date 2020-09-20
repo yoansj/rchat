@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 
 import Login from './Components/Login.jsx'
-import Rooms from './Components/Rooms.jsx'
 import Profile from './Components/Profile.jsx'
 import Room from './Components/Room.jsx'
 
@@ -16,19 +15,19 @@ function App() {
     <div>
         <Router>
             <Switch>
-                <Route exact path="/rchat">
+                <Route exact path="/login">
                     <Login />
-                </Route>
-                <Route path="/choose">
-                    <Rooms />
                 </Route>
                 <Route path="/me">
                     <Profile />
                 </Route>
+                <Route path="/rooms/:room" children={<Room />} />
                 <Route path="/404">
                     <h6>This room does not exist yoo</h6>
                 </Route>
-                <Route path="/rooms/:room" children={<Room />} />
+                <Route path="*">
+                    <h6>This room does not exist yoo</h6>
+                </Route>
             </Switch>
         </Router>
     </div>
